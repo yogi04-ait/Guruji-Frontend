@@ -1,0 +1,21 @@
+User-agent: *
+
+# Allow all public-facing pages
+Allow: /
+Allow: /about
+Allow: /services
+Allow: /industries
+Allow: /hiring
+Allow: /contact
+Allow: /jobs/
+
+# Disallow admin and private routes
+Disallow: /admin/
+Disallow: /admin/login
+Disallow: /admin/hiring-partners
+
+# Crawl delay to be polite to servers
+Crawl-delay: 10
+
+# Sitemap location
+Sitemap: http://www.gjc.services/sitemap.xml
