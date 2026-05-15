@@ -17,8 +17,12 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as JobsJobIdRouteImport } from './routes/jobs.$jobId'
+import { Route as AdminTestimonialsRouteImport } from './routes/admin.testimonials'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as AdminHiringPartnersRouteImport } from './routes/admin.hiring-partners'
+import { Route as AdminEnquiriesRouteImport } from './routes/admin.enquiries'
+import { Route as AdminApplicantsRouteImport } from './routes/admin.applicants'
+import { Route as AdminApplicantApplicantIdRouteImport } from './routes/admin.applicant.$applicantId'
 
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
@@ -60,6 +64,11 @@ const JobsJobIdRoute = JobsJobIdRouteImport.update({
   path: '/jobs/$jobId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminTestimonialsRoute = AdminTestimonialsRouteImport.update({
+  id: '/admin/testimonials',
+  path: '/admin/testimonials',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminLoginRoute = AdminLoginRouteImport.update({
   id: '/admin/login',
   path: '/admin/login',
@@ -70,6 +79,22 @@ const AdminHiringPartnersRoute = AdminHiringPartnersRouteImport.update({
   path: '/admin/hiring-partners',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminEnquiriesRoute = AdminEnquiriesRouteImport.update({
+  id: '/admin/enquiries',
+  path: '/admin/enquiries',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminApplicantsRoute = AdminApplicantsRouteImport.update({
+  id: '/admin/applicants',
+  path: '/admin/applicants',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminApplicantApplicantIdRoute =
+  AdminApplicantApplicantIdRouteImport.update({
+    id: '/admin/applicant/$applicantId',
+    path: '/admin/applicant/$applicantId',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -78,10 +103,14 @@ export interface FileRoutesByFullPath {
   '/hiring': typeof HiringRoute
   '/industries': typeof IndustriesRoute
   '/services': typeof ServicesRoute
+  '/admin/applicants': typeof AdminApplicantsRoute
+  '/admin/enquiries': typeof AdminEnquiriesRoute
   '/admin/hiring-partners': typeof AdminHiringPartnersRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/testimonials': typeof AdminTestimonialsRoute
   '/jobs/$jobId': typeof JobsJobIdRoute
   '/admin/': typeof AdminIndexRoute
+  '/admin/applicant/$applicantId': typeof AdminApplicantApplicantIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -90,10 +119,14 @@ export interface FileRoutesByTo {
   '/hiring': typeof HiringRoute
   '/industries': typeof IndustriesRoute
   '/services': typeof ServicesRoute
+  '/admin/applicants': typeof AdminApplicantsRoute
+  '/admin/enquiries': typeof AdminEnquiriesRoute
   '/admin/hiring-partners': typeof AdminHiringPartnersRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/testimonials': typeof AdminTestimonialsRoute
   '/jobs/$jobId': typeof JobsJobIdRoute
   '/admin': typeof AdminIndexRoute
+  '/admin/applicant/$applicantId': typeof AdminApplicantApplicantIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -103,10 +136,14 @@ export interface FileRoutesById {
   '/hiring': typeof HiringRoute
   '/industries': typeof IndustriesRoute
   '/services': typeof ServicesRoute
+  '/admin/applicants': typeof AdminApplicantsRoute
+  '/admin/enquiries': typeof AdminEnquiriesRoute
   '/admin/hiring-partners': typeof AdminHiringPartnersRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/testimonials': typeof AdminTestimonialsRoute
   '/jobs/$jobId': typeof JobsJobIdRoute
   '/admin/': typeof AdminIndexRoute
+  '/admin/applicant/$applicantId': typeof AdminApplicantApplicantIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -117,10 +154,14 @@ export interface FileRouteTypes {
     | '/hiring'
     | '/industries'
     | '/services'
+    | '/admin/applicants'
+    | '/admin/enquiries'
     | '/admin/hiring-partners'
     | '/admin/login'
+    | '/admin/testimonials'
     | '/jobs/$jobId'
     | '/admin/'
+    | '/admin/applicant/$applicantId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -129,10 +170,14 @@ export interface FileRouteTypes {
     | '/hiring'
     | '/industries'
     | '/services'
+    | '/admin/applicants'
+    | '/admin/enquiries'
     | '/admin/hiring-partners'
     | '/admin/login'
+    | '/admin/testimonials'
     | '/jobs/$jobId'
     | '/admin'
+    | '/admin/applicant/$applicantId'
   id:
     | '__root__'
     | '/'
@@ -141,10 +186,14 @@ export interface FileRouteTypes {
     | '/hiring'
     | '/industries'
     | '/services'
+    | '/admin/applicants'
+    | '/admin/enquiries'
     | '/admin/hiring-partners'
     | '/admin/login'
+    | '/admin/testimonials'
     | '/jobs/$jobId'
     | '/admin/'
+    | '/admin/applicant/$applicantId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -154,10 +203,14 @@ export interface RootRouteChildren {
   HiringRoute: typeof HiringRoute
   IndustriesRoute: typeof IndustriesRoute
   ServicesRoute: typeof ServicesRoute
+  AdminApplicantsRoute: typeof AdminApplicantsRoute
+  AdminEnquiriesRoute: typeof AdminEnquiriesRoute
   AdminHiringPartnersRoute: typeof AdminHiringPartnersRoute
   AdminLoginRoute: typeof AdminLoginRoute
+  AdminTestimonialsRoute: typeof AdminTestimonialsRoute
   JobsJobIdRoute: typeof JobsJobIdRoute
   AdminIndexRoute: typeof AdminIndexRoute
+  AdminApplicantApplicantIdRoute: typeof AdminApplicantApplicantIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -218,6 +271,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof JobsJobIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/testimonials': {
+      id: '/admin/testimonials'
+      path: '/admin/testimonials'
+      fullPath: '/admin/testimonials'
+      preLoaderRoute: typeof AdminTestimonialsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/login': {
       id: '/admin/login'
       path: '/admin/login'
@@ -232,6 +292,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminHiringPartnersRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/enquiries': {
+      id: '/admin/enquiries'
+      path: '/admin/enquiries'
+      fullPath: '/admin/enquiries'
+      preLoaderRoute: typeof AdminEnquiriesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/applicants': {
+      id: '/admin/applicants'
+      path: '/admin/applicants'
+      fullPath: '/admin/applicants'
+      preLoaderRoute: typeof AdminApplicantsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/applicant/$applicantId': {
+      id: '/admin/applicant/$applicantId'
+      path: '/admin/applicant/$applicantId'
+      fullPath: '/admin/applicant/$applicantId'
+      preLoaderRoute: typeof AdminApplicantApplicantIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -242,10 +323,14 @@ const rootRouteChildren: RootRouteChildren = {
   HiringRoute: HiringRoute,
   IndustriesRoute: IndustriesRoute,
   ServicesRoute: ServicesRoute,
+  AdminApplicantsRoute: AdminApplicantsRoute,
+  AdminEnquiriesRoute: AdminEnquiriesRoute,
   AdminHiringPartnersRoute: AdminHiringPartnersRoute,
   AdminLoginRoute: AdminLoginRoute,
+  AdminTestimonialsRoute: AdminTestimonialsRoute,
   JobsJobIdRoute: JobsJobIdRoute,
   AdminIndexRoute: AdminIndexRoute,
+  AdminApplicantApplicantIdRoute: AdminApplicantApplicantIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Quote } from "lucide-react";
 import { api } from "@/lib/api";
 
@@ -12,22 +12,57 @@ interface Testimonial {
 
 export default function TestimonialsSection() {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const rootRef = useRef<HTMLElement | null>(null);
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
+    if (!rootRef.current) return;
+
+    const obs = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) setVisible(true);
+        }
+      },
+      { threshold: 0.1 },
+    );
+
+    obs.observe(rootRef.current);
+
+    return () => obs.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!visible) return;
+
+    let cancelled = false;
+
     const fetchTestimonials = async () => {
+      setLoading(true);
       try {
         const data = await api.testimonials.list();
-        setTestimonials(data);
+        if (!cancelled) setTestimonials(data);
       } catch (error) {
-        console.error("Failed to fetch testimonials:", error);
+        if (!cancelled) console.error("Failed to fetch testimonials:", error);
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     };
 
     fetchTestimonials();
-  }, []);
+
+    return () => {
+      cancelled = true;
+    };
+  }, [visible]);
+
+  if (!visible && !loading && testimonials.length === 0) {
+    // Placeholder while component is offscreen to avoid eager network fetch
+    return (
+      <section ref={(el) => (rootRef.current = el as HTMLElement)} className="py-20" aria-hidden />
+    );
+  }
 
   if (loading) {
     return (
@@ -50,7 +85,10 @@ export default function TestimonialsSection() {
           </p>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div
+          className="grid gap-6 md:grid-cols-2 lg:grid-cols-3"
+          ref={(el) => (rootRef.current = el as HTMLElement)}
+        >
           {testimonials.map((testimonial) => (
             <div
               key={testimonial.id}

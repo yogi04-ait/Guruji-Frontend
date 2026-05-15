@@ -1,8 +1,21 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo, useCallback, memo } from "react";
 import { Layout } from "@/components/Layout";
 import { api } from "@/lib/api";
-import { Pencil, Trash2, Plus, LogOut, Save, X, Eye, EyeOff, Users } from "lucide-react";
+import {
+  Pencil,
+  Trash2,
+  Plus,
+  LogOut,
+  Save,
+  X,
+  Eye,
+  EyeOff,
+  Users,
+  MessageSquare,
+  FileText,
+  FileClock,
+} from "lucide-react";
 
 export const Route = createFileRoute("/admin/")({
   head: () => ({
@@ -49,6 +62,10 @@ function AdminPage() {
   const [authChecked, setAuthChecked] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [companies, setCompanies] = useState<Company[]>([]);
+  const [page, setPage] = useState(1);
+  const [limit] = useState(10);
+  const [meta, setMeta] = useState<any>({ page: 1, totalPages: 1, total: 0, limit: 10 });
+  const [loadingCompanies, setLoadingCompanies] = useState(false);
   const [editing, setEditing] = useState<Company | null>(null);
   const [creating, setCreating] = useState(false);
   const [draft, setDraft] = useState<Omit<Company, "id">>(empty);
@@ -60,37 +77,51 @@ function AdminPage() {
         await api.auth.me();
         setIsAdmin(true);
         setAuthChecked(true);
-        await loadCompanies();
+        await loadCompanies(page);
       } catch (err: any) {
         navigate({ to: "/admin/login" });
       }
     };
     init();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate]);
+  const loadCompanies = useCallback(
+    async (p = 1) => {
+      setLoadingCompanies(true);
+      try {
+        const res = await api.companies.list(p, limit);
 
-  const loadCompanies = async () => {
-    try {
-      const data = await api.companies.list();
-      setCompanies(data ?? []);
-    } catch (err: any) {
-      if (err.response?.status === 401) {
-        navigate({ to: "/admin/login" });
+        // Support legacy non-paginated responses
+        if (Array.isArray(res)) {
+          setCompanies(res ?? []);
+          setMeta({ page: 1, totalPages: 1, total: res.length, limit });
+        } else {
+          setCompanies(res.items || []);
+          setMeta(res.meta || { page: p, totalPages: 1, total: res.items?.length || 0, limit });
+        }
+      } catch (err: any) {
+        if (err.response?.status === 401) {
+          navigate({ to: "/admin/login" });
+        }
+      } finally {
+        setLoadingCompanies(false);
       }
-    }
-  };
+    },
+    [navigate, limit],
+  );
 
-  const startCreate = () => {
+  const startCreate = useCallback(() => {
     setDraft(empty);
     setCreating(true);
     setEditing(null);
-  };
+  }, []);
 
-  const startEdit = async (c: Company) => {
+  const startEdit = useCallback(async (c: Company) => {
     setEditing(c);
     const values = await api.companies.jobdetails(c.id);
     setDraft({ ...values.data });
     setCreating(false);
-  };
+  }, []);
 
   const cancel = () => {
     setEditing(null);
@@ -106,6 +137,12 @@ function AdminPage() {
       alert(err.response?.data?.message || "An error occurred");
     }
   };
+
+  useEffect(() => {
+    // load when page changes
+    loadCompanies(page);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page]);
 
   const save = async () => {
     if (!draft.name.trim()) return;
@@ -125,7 +162,7 @@ function AdminPage() {
       } else {
         await api.companies.create(payload);
       }
-      await loadCompanies();
+      await loadCompanies(page);
       cancel();
     } catch (err) {
       handleAuthError(err);
@@ -134,52 +171,66 @@ function AdminPage() {
     }
   };
 
-  const remove = async (id: string) => {
-    if (!confirm("Delete this company listing?")) return;
+  const remove = useCallback(
+    async (id: string) => {
+      if (!confirm("Delete this company listing?")) return;
 
-    // Store previous state in case API fails
-    const previousCompanies = companies;
-
-    // Instant UI update
-    setCompanies((prev) => prev.filter((c) => c.id !== id));
-    try {
-      await api.companies.delete(id);
-    } catch (err) {
-      // Rollback if delete fails
-      setCompanies(previousCompanies);
-      handleAuthError(err);
-    }
-  };
-
-  const toggleActive = async (c: Company) => {
-    try {
-      // Don't allow toggling archived jobs
-      if (c.status === "archived") {
-        return;
+      // Instant UI update
+      setCompanies((prev) => prev.filter((c) => c.id !== id));
+      try {
+        await api.companies.delete(id);
+        // After deletion, if this was the last item on the page, go back a page
+        if (companies.length === 1 && page > 1) {
+          setPage((p) => p - 1);
+        } else {
+          await loadCompanies(page);
+        }
+        } catch (err) {
+          // On error reload from backend
+          await loadCompanies(page);
+          handleAuthError(err);
       }
+    },
+    [loadCompanies, companies, page],
+  );
 
-      const newStatus = c.status === "active" ? "closed" : "active";
+  const toggleActive = useCallback(
+    async (c: Company) => {
+      try {
+        // Don't allow toggling archived jobs
+        if (c.status === "archived") {
+          return;
+        }
 
-      await api.companies.update(c.id, {
-        status: newStatus,
-      });
+        const newStatus = c.status === "active" ? "closed" : "active";
 
-      await loadCompanies();
-    } catch (err) {
-      handleAuthError(err);
-    }
-  };
+        await api.companies.update(c.id, {
+          status: newStatus,
+        });
 
-  const logout = async () => {
+        await loadCompanies(page);
+      } catch (err) {
+        handleAuthError(err);
+      }
+    },
+    [loadCompanies, page],
+  );
+
+  const logout = useCallback(async () => {
     try {
       await api.auth.logout();
     } catch (e) {}
     navigate({ to: "/admin/login" });
-  };
+  }, [navigate]);
+
+  const adminActions = useMemo(
+    () => ({ onAddJob: startCreate, onLogout: logout }),
+    [startCreate, logout],
+  );
 
   if (!authChecked) {
     return (
-      <Layout>
+      <Layout adminMode adminActions={adminActions}>
         <div className="p-20 text-center text-muted-foreground">Loading…</div>
       </Layout>
     );
@@ -187,7 +238,7 @@ function AdminPage() {
 
   if (!isAdmin) {
     return (
-      <Layout>
+      <Layout adminMode adminActions={adminActions}>
         <div className="mx-auto max-w-md p-12 text-center">
           <h1 className="text-2xl font-bold">Access denied</h1>
           <p className="mt-2 text-sm text-muted-foreground">
@@ -205,7 +256,7 @@ function AdminPage() {
   }
 
   return (
-    <Layout>
+    <Layout adminMode adminActions={adminActions}>
       <section className="mx-auto max-w-7xl px-5 py-12 lg:px-8">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
@@ -214,12 +265,30 @@ function AdminPage() {
               Manage currently hiring company listings.
             </p>
           </div>
-          <div className="flex gap-3">
+          <div className="hidden gap-3 lg:flex">
             <button
               onClick={() => navigate({ to: "/admin/hiring-partners" })}
               className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-5 py-2.5 text-sm font-semibold hover:bg-secondary"
             >
               <Users className="h-4 w-4" /> Hiring Partners
+            </button>
+            <button
+              onClick={() => navigate({ to: "/admin/testimonials" })}
+              className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-5 py-2.5 text-sm font-semibold hover:bg-secondary"
+            >
+              <MessageSquare className="h-4 w-4" /> Testimonials
+            </button>
+            <button
+              onClick={() => navigate({ to: "/admin/applicants" })}
+              className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-5 py-2.5 text-sm font-semibold hover:bg-secondary"
+            >
+              <FileText className="h-4 w-4" /> Applicants
+            </button>
+            <button
+              onClick={() => navigate({ to: "/admin/enquiries" as any })}
+              className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-5 py-2.5 text-sm font-semibold hover:bg-secondary"
+            >
+              <FileClock className="h-4 w-4" /> Enquiries
             </button>
             <button
               onClick={startCreate}
@@ -350,89 +419,39 @@ function AdminPage() {
           </div>
         )}
 
-        <div className="mt-10 overflow-hidden rounded-2xl border border-border bg-card">
-          <table className="w-full text-sm">
-            <thead className="bg-secondary text-left text-xs uppercase tracking-wider text-muted-foreground">
-              <tr>
-                <th className="p-4">Company</th>
-                <th className="p-4">Role</th>
-                <th className="p-4">Location</th>
-                <th className="p-4">Openings</th>
-                <th className="p-4">Status</th>
-                <th className="p-4 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {companies.length === 0 && (
-                <tr>
-                  <td colSpan={6} className="p-8 text-center text-muted-foreground">
-                    No listings yet. Click "Add Jobs" to create one.
-                  </td>
-                </tr>
-              )}
-              {companies.map((c) => (
-                <tr key={c.id} className="border-t border-border">
-                  <td className="p-4 font-semibold">
-                    {c.name}
-                    <div className="text-xs font-normal text-muted-foreground">{c.industry}</div>
-                  </td>
-                  <td className="p-4">{c.role || "—"}</td>
-                  <td className="p-4">{c.location || "—"}</td>
-                  <td className="p-4">{c.openings ?? "—"}</td>
-                  <td className="p-4">
-                    <button
-                      onClick={() => toggleActive(c)}
-                      disabled={c.status === "archived"}
-                      className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold transition-opacity
-      ${
-        c.status === "active"
-          ? "bg-green-500/15 text-green-600"
-          : c.status === "closed"
-            ? "bg-yellow-500/15 text-yellow-600"
-            : "bg-muted text-muted-foreground opacity-60 cursor-not-allowed"
-      }
-    `}
-                    >
-                      {c.status === "active" ? (
-                        <Eye className="h-3 w-3" />
-                      ) : (
-                        <EyeOff className="h-3 w-3" />
-                      )}
-
-                      {c.status === "active"
-                        ? "Active"
-                        : c.status === "closed"
-                          ? "Closed"
-                          : "Archived"}
-                    </button>
-                  </td>
-                  <td className="p-4 text-right">
-                    <div className="inline-flex gap-2">
-                      <button
-                        onClick={() => startEdit(c)}
-                        className="rounded-lg border border-border p-2 hover:bg-secondary"
-                      >
-                        <Pencil className="h-4 w-4" />
-                      </button>
-                      <button
-                        onClick={() => remove(c.id)}
-                        className="rounded-lg border border-border p-2 text-destructive hover:bg-destructive/10"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <CompaniesTable
+          companies={companies}
+          onEdit={startEdit}
+          onRemove={remove}
+          onToggleActive={toggleActive}
+        />
+        <div className="mt-4 flex items-center justify-between">
+          <div className="text-sm text-muted-foreground">
+            Page {meta.page} of {meta.totalPages} — {meta.total} listings
+          </div>
+          <div className="inline-flex items-center gap-2">
+            <button
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
+              disabled={page <= 1}
+              className="rounded-full border border-border bg-card px-3 py-1 text-sm font-semibold hover:bg-secondary disabled:opacity-50"
+            >
+              Previous
+            </button>
+            <button
+              onClick={() => setPage((p) => Math.min(meta.totalPages || 1, p + 1))}
+              disabled={page >= (meta.totalPages || 1)}
+              className="rounded-full border border-border bg-card px-3 py-1 text-sm font-semibold hover:bg-secondary disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
         </div>
       </section>
     </Layout>
   );
 }
 
-function Field({
+const Field = memo(function Field({
   label,
   children,
   className = "",
@@ -449,4 +468,92 @@ function Field({
       <div className="mt-1">{children}</div>
     </label>
   );
-}
+});
+
+const CompaniesTable = memo(function CompaniesTable({
+  companies,
+  onEdit,
+  onRemove,
+  onToggleActive,
+}: {
+  companies: Company[];
+  onEdit: (c: Company) => void | Promise<void>;
+  onRemove: (id: string) => void | Promise<void>;
+  onToggleActive: (c: Company) => void | Promise<void>;
+}) {
+  return (
+    <div className="mt-10 overflow-hidden rounded-2xl border border-border bg-card">
+      <table className="w-full text-sm">
+        <thead className="bg-secondary text-left text-xs uppercase tracking-wider text-muted-foreground">
+          <tr>
+            <th className="p-4">Company</th>
+            <th className="p-4">Role</th>
+            <th className="p-4">Location</th>
+            <th className="p-4">Openings</th>
+            <th className="p-4">Status</th>
+            <th className="p-4 text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {companies.length === 0 && (
+            <tr>
+              <td colSpan={6} className="p-8 text-center text-muted-foreground">
+                No listings yet. Click "Add Jobs" to create one.
+              </td>
+            </tr>
+          )}
+          {companies.map((c) => (
+            <tr key={c.id} className="border-t border-border">
+              <td className="p-4 font-semibold">
+                {c.name}
+                <div className="text-xs font-normal text-muted-foreground">{c.industry}</div>
+              </td>
+              <td className="p-4">{c.role || "—"}</td>
+              <td className="p-4">{c.location || "—"}</td>
+              <td className="p-4">{c.openings ?? "—"}</td>
+              <td className="p-4">
+                <button
+                  onClick={() => onToggleActive(c)}
+                  disabled={c.status === "archived"}
+                  className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold transition-opacity
+      ${
+        c.status === "active"
+          ? "bg-green-500/15 text-green-600"
+          : c.status === "closed"
+            ? "bg-yellow-500/15 text-yellow-600"
+            : "bg-muted text-muted-foreground opacity-60 cursor-not-allowed"
+      }
+    `}
+                >
+                  {c.status === "active" ? (
+                    <Eye className="h-3 w-3" />
+                  ) : (
+                    <EyeOff className="h-3 w-3" />
+                  )}
+
+                  {c.status === "active" ? "Active" : c.status === "closed" ? "Closed" : "Archived"}
+                </button>
+              </td>
+              <td className="p-4 text-right">
+                <div className="inline-flex gap-2">
+                  <button
+                    onClick={() => onEdit(c)}
+                    className="rounded-lg border border-border p-2 hover:bg-secondary"
+                  >
+                    <Pencil className="h-4 w-4" />
+                  </button>
+                  <button
+                    onClick={() => onRemove(c.id)}
+                    className="rounded-lg border border-border p-2 text-destructive hover:bg-destructive/10"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+});

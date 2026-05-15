@@ -130,13 +130,10 @@ function HomePage() {
       <section className="relative overflow-hidden bg-gradient-soft">
         <div className="absolute -top-24 left-1/3 h-96 w-96 rounded-full bg-primary/15 blur-3xl" />
         <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-accent/15 blur-3xl" />
-        <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-5 py-16 lg:grid-cols-[1.1fr_1fr] lg:gap-16 lg:px-8 lg:py-24">
+        <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-5 py-10 lg:grid-cols-[1.1fr_1fr] lg:gap-16 lg:px-8 lg:py-8">
           <div>
-            <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-1.5 text-xs font-semibold text-primary shadow-sm">
-              <span className="inline-block h-1.5 w-1.5 rounded-full bg-accent" /> Get Job Companion
-            </span>
-            <h1 className="mt-5 text-balance text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-[3.75rem] lg:leading-[1.05]">
-              Your Job Companion for{" "}
+            <h1 className="mt-10 text-balance text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-[3.75rem] lg:leading-[1.05]">
+              Get Job Companion for{" "}
               <span className="bg-gradient-accent bg-clip-text text-transparent">
                 Career Growth
               </span>
@@ -177,7 +174,7 @@ function HomePage() {
 
           <div className="relative">
             <div className="absolute -inset-4 rounded-3xl bg-gradient-hero opacity-20 blur-2xl" />
-            <div className="relative overflow-hidden rounded-3xl border border-border bg-card shadow-large">
+            <div className="relative -mt-5 overflow-hidden rounded-3xl border border-border bg-card shadow-large">
               <img
                 src={heroImg}
                 alt="Professionals collaborating in a modern office in Gurgaon"

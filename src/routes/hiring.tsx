@@ -16,14 +16,20 @@ export const Route = createFileRoute("/hiring")({
       },
       // Open Graph
       { property: "og:title", content: "Currently Hiring — Guruji Job Consultancy" },
-      { property: "og:description", content: "Live job openings curated by Guruji Job Consultancy. Apply now." },
+      {
+        property: "og:description",
+        content: "Live job openings curated by Guruji Job Consultancy. Apply now.",
+      },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "http://www.gjc.services/hiring" },
       { property: "og:image", content: "http://www.gjc.services/og-image.jpg" },
       // Twitter / X Card
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "Currently Hiring — Guruji Job Consultancy" },
-      { name: "twitter:description", content: "Live job openings across Delhi NCR. Apply directly." },
+      {
+        name: "twitter:description",
+        content: "Live job openings across Delhi NCR. Apply directly.",
+      },
       { name: "twitter:image", content: "http://www.gjc.services/og-image.jpg" },
     ],
     links: [{ rel: "canonical", href: "http://www.gjc.services/hiring" }],
@@ -48,19 +54,37 @@ function HiringPage() {
   const [companies, setCompanies] = useState<Company[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const [page, setPage] = useState(1);
+  const [limit] = useState(10);
+  const [meta, setMeta] = useState<any>({ page: 1, totalPages: 1, total: 0, limit: 10 });
+
   useEffect(() => {
+    let cancelled = false;
+
+    setLoading(true);
+
     api.companies
-      .list()
-      .then((data) => {
-        const activeCompanies = (data ?? []).filter((c: Company) => c.status === "active");
+      .list(page, limit)
+      .then((res: any) => {
+        if (cancelled) return;
+
+        const items = res?.items || [];
+
+        const activeCompanies = items.filter((c: Company) => c.status === "active");
         setCompanies(activeCompanies);
-        setLoading(false);
+        setMeta(res?.meta || { page, totalPages: 1, total: activeCompanies.length, limit });
       })
       .catch((err) => {
         console.error(err);
-        setLoading(false);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
       });
-  }, []);
+
+    return () => {
+      cancelled = true;
+    };
+  }, [page, limit]);
 
   return (
     <Layout>
@@ -81,50 +105,74 @@ function HiringPage() {
             </p>
           </div>
         ) : (
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {companies.map((c) => (
-              <article
-                key={c.id}
-                className="flex flex-col rounded-2xl border border-border bg-card p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-elegant"
-              >
-                <div className="flex items-start gap-4">
-                  <div className="min-w-0">
-                    <h3 className="truncate text-lg font-bold">{c.name}</h3>
-                    {c.industry && <p className="text-xs text-muted-foreground">{c.industry}</p>}
-                  </div>
-                </div>
-
-                {c.role && <p className="mt-4 text-sm font-semibold text-primary">{c.role}</p>}
-
-                <ul className="mt-4 space-y-2 text-sm text-foreground">
-                  {c.location && (
-                    <li className="flex items-center gap-2">
-                      <MapPin className="h-4 w-4 text-accent" /> {c.location}
-                    </li>
-                  )}
-                  {c.experience && (
-                    <li className="flex items-center gap-2">
-                      <Clock className="h-4 w-4 text-accent" /> {c.experience}
-                    </li>
-                  )}
-                  {c.openings != null && (
-                    <li className="flex items-center gap-2">
-                      <Users className="h-4 w-4 text-accent" /> {c.openings} opening
-                      {c.openings === 1 ? "" : "s"}
-                    </li>
-                  )}
-                </ul>
-
-                <div className="mt-6 flex-1" />
-                <Link
-                  to="/jobs/$jobId"
-                  params={{ jobId: c.id }}
-                  className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-elegant transition-all hover:bg-primary-glow"
+          <div>
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {companies.map((c) => (
+                <article
+                  key={c.id}
+                  className="flex flex-col rounded-2xl border border-border bg-card p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-elegant"
                 >
-                  Apply Now <ExternalLink className="h-4 w-4" />
-                </Link>
-              </article>
-            ))}
+                  <div className="flex items-start gap-4">
+                    <div className="min-w-0">
+                      <h3 className="truncate text-lg font-bold">{c.name}</h3>
+                      {c.industry && <p className="text-xs text-muted-foreground">{c.industry}</p>}
+                    </div>
+                  </div>
+
+                  {c.role && <p className="mt-4 text-sm font-semibold text-primary">{c.role}</p>}
+
+                  <ul className="mt-4 space-y-2 text-sm text-foreground">
+                    {c.location && (
+                      <li className="flex items-center gap-2">
+                        <MapPin className="h-4 w-4 text-accent" /> {c.location}
+                      </li>
+                    )}
+                    {c.experience && (
+                      <li className="flex items-center gap-2">
+                        <Clock className="h-4 w-4 text-accent" /> {c.experience}
+                      </li>
+                    )}
+                    {c.openings != null && (
+                      <li className="flex items-center gap-2">
+                        <Users className="h-4 w-4 text-accent" /> {c.openings} opening
+                        {c.openings === 1 ? "" : "s"}
+                      </li>
+                    )}
+                  </ul>
+
+                  <div className="mt-6 flex-1" />
+                  <Link
+                    to="/jobs/$jobId"
+                    params={{ jobId: c.id }}
+                    className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-elegant transition-all hover:bg-primary-glow"
+                  >
+                    Apply Now <ExternalLink className="h-4 w-4" />
+                  </Link>
+                </article>
+              ))}
+            </div>
+
+            <div className="mt-4 flex items-center justify-between">
+              <div className="text-sm text-muted-foreground">
+                Page {meta.page} of {meta.totalPages} — {meta.total} openings
+              </div>
+              <div className="inline-flex items-center gap-2">
+                <button
+                  onClick={() => setPage((p) => Math.max(1, p - 1))}
+                  disabled={page <= 1}
+                  className="rounded-full border border-border bg-card px-3 py-1 text-sm font-semibold hover:bg-secondary disabled:opacity-50"
+                >
+                  Previous
+                </button>
+                <button
+                  onClick={() => setPage((p) => Math.min(meta.totalPages || 1, p + 1))}
+                  disabled={page >= (meta.totalPages || 1)}
+                  className="rounded-full border border-border bg-card px-3 py-1 text-sm font-semibold hover:bg-secondary disabled:opacity-50"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
           </div>
         )}
       </section>

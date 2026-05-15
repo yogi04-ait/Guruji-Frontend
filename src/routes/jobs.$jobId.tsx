@@ -44,7 +44,7 @@ export const Route = createFileRoute("/jobs/$jobId")({
     if (!job) {
       return {
         meta: [
-          { title: "Job Not Found — Guruji Job Consultancy" },
+          { title: "Apply for Job — Guruji Job Consultancy" },
           { name: "robots", content: "noindex" },
         ],
       };

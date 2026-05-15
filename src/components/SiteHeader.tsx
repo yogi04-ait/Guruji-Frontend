@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, memo } from "react";
 import { Menu, X, Briefcase } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -12,19 +12,43 @@ const navItems = [
   { to: "/contact", label: "Contact" },
 ] as const;
 
-export function SiteHeader() {
+type AdminActions = {
+  onAddJob?: () => void;
+  onLogout?: () => void;
+};
+
+export const SiteHeader = memo(function SiteHeader({
+  adminMode,
+  adminActions,
+}: { adminMode?: boolean; adminActions?: AdminActions } = {}) {
   const [open, setOpen] = useState(false);
 
   return (
-    <header role="banner" className="sticky top-0 z-50 w-full border-b border-border/60 bg-background/85 backdrop-blur-lg">
+    <header
+      role="banner"
+      className="sticky top-0 z-50 w-full border-b border-border/60 bg-background/85 backdrop-blur-lg"
+    >
       <div className="mx-auto flex h-18 max-w-7xl items-center justify-between px-5 py-3 lg:px-8">
-        <Link to="/" className="flex items-center gap-3 group" aria-label="Guruji Job Consultancy — Home" onClick={() => setOpen(false)}>
+        <Link
+          to="/"
+          className="flex items-center gap-3 group"
+          aria-label="Guruji Job Consultancy — Home"
+          onClick={() => setOpen(false)}
+        >
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-hero shadow-elegant transition-transform group-hover:scale-105">
-            <Briefcase className="h-5 w-5 text-primary-foreground" strokeWidth={2.5} aria-hidden="true" />
+            <Briefcase
+              className="h-5 w-5 text-primary-foreground"
+              strokeWidth={2.5}
+              aria-hidden="true"
+            />
           </div>
           <div className="flex flex-col leading-tight">
-            <span className="font-display text-base font-bold text-foreground">Guruji Job Consultancy</span>
-            <span className="text-[11px] font-medium tracking-wide text-accent">Get Job Companion</span>
+            <span className="font-display text-base font-bold text-foreground">
+              Guruji Job Consultancy
+            </span>
+            <span className="text-[11px] font-medium tracking-wide text-accent">
+              Get Job Companion
+            </span>
           </div>
         </Link>
 
@@ -55,10 +79,13 @@ export function SiteHeader() {
           onClick={() => setOpen((v) => !v)}
           className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-border lg:hidden"
         >
-          {open ? <X className="h-5 w-5" aria-hidden="true" /> : <Menu className="h-5 w-5" aria-hidden="true" />}
+          {open ? (
+            <X className="h-5 w-5" aria-hidden="true" />
+          ) : (
+            <Menu className="h-5 w-5" aria-hidden="true" />
+          )}
         </button>
       </div>
-
       <div
         id="mobile-nav"
         className={cn(
@@ -66,27 +93,92 @@ export function SiteHeader() {
           open ? "max-h-96" : "max-h-0",
         )}
       >
-        <nav className="flex flex-col gap-1 px-5 py-4" aria-label="Mobile navigation">
-          {navItems.map((item) => (
+        {adminMode ? (
+          <nav className="flex flex-col gap-1 px-5 py-4" aria-label="Admin mobile navigation">
             <Link
-              key={item.to}
-              to={item.to}
-              activeOptions={{ exact: item.to === "/" }}
+              to="/"
+              activeOptions={{ exact: true }}
               onClick={() => setOpen(false)}
               className="rounded-lg px-4 py-3 text-sm font-medium text-muted-foreground hover:bg-secondary hover:text-foreground data-[status=active]:bg-secondary data-[status=active]:text-primary"
             >
-              {item.label}
+              Home
             </Link>
-          ))}
-          <Link
-            to="/contact"
-            onClick={() => setOpen(false)}
-            className="mt-2 inline-flex items-center justify-center rounded-full bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground"
-          >
-            Get Started
-          </Link>
-        </nav>
+
+            <Link
+              to="/admin/hiring-partners"
+              onClick={() => setOpen(false)}
+              className="rounded-lg px-4 py-3 text-sm font-medium text-muted-foreground hover:bg-secondary hover:text-foreground"
+            >
+              Hiring Partners
+            </Link>
+
+            <Link
+              to="/admin/testimonials"
+              onClick={() => setOpen(false)}
+              className="rounded-lg px-4 py-3 text-sm font-medium text-muted-foreground hover:bg-secondary hover:text-foreground"
+            >
+              Testimonials
+            </Link>
+
+            <Link
+              to="/admin/applicants"
+              onClick={() => setOpen(false)}
+              className="rounded-lg px-4 py-3 text-sm font-medium text-muted-foreground hover:bg-secondary hover:text-foreground"
+            >
+              Applicants
+            </Link>
+
+            <Link
+              to="/admin/enquiries"
+              onClick={() => setOpen(false)}
+              className="rounded-lg px-4 py-3 text-sm font-medium text-muted-foreground hover:bg-secondary hover:text-foreground"
+            >
+              Enquiries
+            </Link>
+
+            <button
+              onClick={() => {
+                setOpen(false);
+                adminActions?.onAddJob?.();
+              }}
+              className="mt-2 inline-flex items-center justify-center rounded-full bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground"
+            >
+              Add Job
+            </button>
+
+            <button
+              onClick={() => {
+                setOpen(false);
+                adminActions?.onLogout?.();
+              }}
+              className="mt-2 inline-flex items-center justify-center rounded-full border border-border bg-card px-5 py-3 text-sm font-semibold hover:bg-secondary"
+            >
+              Logout
+            </button>
+          </nav>
+        ) : (
+          <nav className="flex flex-col gap-1 px-5 py-4" aria-label="Mobile navigation">
+            {navItems.map((item) => (
+              <Link
+                key={item.to}
+                to={item.to}
+                activeOptions={{ exact: item.to === "/" }}
+                onClick={() => setOpen(false)}
+                className="rounded-lg px-4 py-3 text-sm font-medium text-muted-foreground hover:bg-secondary hover:text-foreground data-[status=active]:bg-secondary data-[status=active]:text-primary"
+              >
+                {item.label}
+              </Link>
+            ))}
+            <Link
+              to="/contact"
+              onClick={() => setOpen(false)}
+              className="mt-2 inline-flex items-center justify-center rounded-full bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground"
+            >
+              Get Started
+            </Link>
+          </nav>
+        )}
       </div>
     </header>
   );
-}
+});

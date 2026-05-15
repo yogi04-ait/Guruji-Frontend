@@ -1,4 +1,4 @@
-import React, { useEffect, useState, memo } from "react";
+import React, { useEffect, useState, memo, useRef } from "react";
 import { api } from "@/lib/api";
 
 const partners = [
@@ -17,26 +17,64 @@ const partners = [
 export function TrustedBy() {
   const [companies, setCompanies] = useState<string[]>(partners);
 
+  const rootRef = useRef<HTMLElement | null>(null);
+  const [visible, setVisible] = useState(false);
+
   useEffect(() => {
+    let cancelled = false;
+
+    if (!rootRef.current) return;
+
+    const obs = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            setVisible(true);
+          }
+        }
+      },
+      { root: null, threshold: 0.1 },
+    );
+
+    obs.observe(rootRef.current);
+
+    return () => {
+      cancelled = true;
+      obs.disconnect();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!visible) return;
+
+    let cancelled = false;
+
     const loadPartners = async () => {
       try {
         const data = await api.hiringPartners.list();
+
+        if (cancelled) return;
 
         if (Array.isArray(data)) {
           if (data.length > 0 && typeof data[0] === "object") {
             setCompanies(data.map((item: any) => item.name || item.id));
           } else {
-            setCompanies(data);
+            setCompanies(partners);
           }
         }
       } catch (err: any) {
+        if (cancelled) return;
         // fallback to static partners
         setCompanies(partners);
       }
     };
 
     loadPartners();
-  }, []);
+
+    return () => {
+      cancelled = true;
+    };
+  }, [visible]);
 
   return (
     <section className="border-y border-border bg-card/50 py-14 lg:py-16">
@@ -55,7 +93,10 @@ export function TrustedBy() {
           </p>
         </div>
 
-        <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+        <div
+          ref={(el) => (rootRef.current = el as HTMLElement)}
+          className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5"
+        >
           {companies.map((company) => (
             <div
               key={company}
