@@ -23,8 +23,8 @@ export const Route = createFileRoute("/contact")({
           "Take the first step towards your career growth. Reach our team in Gurgaon, Delhi NCR.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "http://www.gjc.services/contact" },
-      { property: "og:image", content: "http://www.gjc.services/og-image.jpg" },
+      { property: "og:url", content: "https://gurujijobconsultancy.in/contact" },
+      { property: "og:image", content: "https://gurujijobconsultancy.in/og-image.jpg" },
       // Twitter / X Card
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "Contact — Guruji Job Consultancy" },
@@ -32,14 +32,14 @@ export const Route = createFileRoute("/contact")({
         name: "twitter:description",
         content: "Reach Guruji Job Consultancy in Gurgaon, Delhi NCR for placement or hiring.",
       },
-      { name: "twitter:image", content: "http://www.gjc.services/og-image.jpg" },
+      { name: "twitter:image", content: "https://gurujijobconsultancy.in/og-image.jpg" },
     ],
-    links: [{ rel: "canonical", href: "http://www.gjc.services/contact" }],
+    links: [{ rel: "canonical", href: "https://gurujijobconsultancy.in/contact" }],
     scripts: [
       {
         type: "application/ld+json",
         children:
-          '{"@context":"https://schema.org","@type":"ContactPage","name":"Contact Guruji Job Consultancy","description":"Get in touch with Guruji Job Consultancy in Gurgaon, Delhi NCR.","url":"http://www.gjc.services/contact","mainEntity":{"@type":"LocalBusiness","name":"Guruji Job Consultancy","telephone":"+91-92170-10815","email":"guruji.jobconsultancy@gmail.com","address":{"@type":"PostalAddress","addressLocality":"Gurugram","addressRegion":"Haryana","addressCountry":"IN"}}}',
+          '{"@context":"https://schema.org","@type":"ContactPage","name":"Contact Guruji Job Consultancy","description":"Get in touch with Guruji Job Consultancy in Gurgaon, Delhi NCR.","url":"https://gurujijobconsultancy.in/contact","mainEntity":{"@type":"LocalBusiness","name":"Guruji Job Consultancy","telephone":"+91-92170-10815","email":"contactus@gurujijobconsultancy.in","address":{"@type":"PostalAddress","addressLocality":"Gurugram","addressRegion":"Haryana","addressCountry":"IN"}}}',
       },
     ],
   }),
@@ -56,14 +56,14 @@ const contacts = [
   {
     icon: Phone,
     label: "Phone",
-    value: "+91 74287 00215",
-    href: "tel:+917428700215",
+    value: "+91 74287 00214",
+    href: "tel:+917428700214",
   },
   {
     icon: Mail,
     label: "Email",
-    value: "guruji.jobconsultancy@gmail.com",
-    href: "mailto:guruji.jobconsultancy@gmail.com",
+    value: "Contactus@gurujijobconsultancy.in",
+    href: "mailto:contactus@gurujijobconsultancy.in",
   },
   { icon: MapPin, label: "Location", value: "Gurgaon, Delhi NCR" },
 ];
@@ -72,7 +72,7 @@ type EnquiryCategory = "job seeker" | "employer" | "other";
 
 function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
-  const [category, setCategory] = useState<EnquiryCategory>("other");
+  const [category, setCategory] = useState<EnquiryCategory>("job seeker");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -102,7 +102,7 @@ function ContactPage() {
       setEmail("");
       setPhone("");
       setMessage("");
-      setCategory("other");
+      setCategory("job seeker");
     } catch (error: any) {
       console.error(error);
 

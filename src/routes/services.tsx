@@ -34,8 +34,8 @@ export const Route = createFileRoute("/services")({
           "Tailored placement and recruitment services for job seekers and employers across industries in Gurgaon and Delhi NCR.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "http://www.gjc.services/services" },
-      { property: "og:image", content: "http://www.gjc.services/og-image.jpg" },
+      { property: "og:url", content: "https://gurujijobconsultancy.in/services" },
+      { property: "og:image", content: "https://gurujijobconsultancy.in/og-image.jpg" },
       // Twitter / X Card
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "Services — Guruji Job Consultancy" },
@@ -43,9 +43,9 @@ export const Route = createFileRoute("/services")({
         name: "twitter:description",
         content: "Placement and recruitment services for job seekers and employers in Delhi NCR.",
       },
-      { name: "twitter:image", content: "http://www.gjc.services/og-image.jpg" },
+      { name: "twitter:image", content: "https://gurujijobconsultancy.in/og-image.jpg" },
     ],
-    links: [{ rel: "canonical", href: "http://www.gjc.services/services" }],
+    links: [{ rel: "canonical", href: "https://gurujijobconsultancy.in/services" }],
   }),
   component: ServicesPage,
 });

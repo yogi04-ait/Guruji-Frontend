@@ -24,7 +24,7 @@ function NotFoundComponent() {
   );
 }
 
-const BASE_URL = "http://www.gjc.services";
+const BASE_URL = "https://gurujijobconsultancy.in";
 const OG_IMAGE = `${BASE_URL}/og-image.jpg`;
 
 export const Route = createRootRoute({
@@ -34,11 +34,18 @@ export const Route = createRootRoute({
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { name: "theme-color", content: "#4f46e5" },
       { title: "Guruji Job Consultancy — Get Job Companion" },
-      { name: "description", content: "Building careers and creating opportunities. Personalized job placement and trusted recruitment across India." },
+      {
+        name: "description",
+        content:
+          "Building careers and creating opportunities. Personalized job placement and trusted recruitment across India.",
+      },
       // Open Graph — global fallbacks
       { property: "og:site_name", content: "Guruji Job Consultancy" },
       { property: "og:title", content: "Guruji Job Consultancy — Get Job Companion" },
-      { property: "og:description", content: "Building careers. Creating opportunities. Trusted recruitment across India." },
+      {
+        property: "og:description",
+        content: "Building careers. Creating opportunities. Trusted recruitment across India.",
+      },
       { property: "og:type", content: "website" },
       { property: "og:url", content: BASE_URL },
       { property: "og:image", content: OG_IMAGE },
@@ -49,7 +56,10 @@ export const Route = createRootRoute({
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@GurujiJobs" },
       { name: "twitter:title", content: "Guruji Job Consultancy — Get Job Companion" },
-      { name: "twitter:description", content: "Building careers. Creating opportunities. Trusted recruitment across India." },
+      {
+        name: "twitter:description",
+        content: "Building careers. Creating opportunities. Trusted recruitment across India.",
+      },
       { name: "twitter:image", content: OG_IMAGE },
     ],
     links: [

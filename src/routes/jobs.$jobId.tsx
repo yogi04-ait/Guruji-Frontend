@@ -59,7 +59,7 @@ export const Route = createFileRoute("/jobs/$jobId")({
     ]
       .filter(Boolean)
       .join(" ");
-    const canonicalUrl = `http://www.gjc.services/jobs/${job.id}`;
+    const canonicalUrl = `https://gurujijobconsultancy.in/jobs/${job.id}`;
     const jobPostingLd = JSON.stringify({
       "@context": "https://schema.org",
       "@type": "JobPosting",
@@ -106,12 +106,12 @@ export const Route = createFileRoute("/jobs/$jobId")({
         { property: "og:description", content: description },
         { property: "og:type", content: "website" },
         { property: "og:url", content: canonicalUrl },
-        { property: "og:image", content: "http://www.gjc.services/og-image.jpg" },
+        { property: "og:image", content: "https://gurujijobconsultancy.in/og-image.jpg" },
         // Twitter / X Card
         { name: "twitter:card", content: "summary_large_image" },
         { name: "twitter:title", content: title },
         { name: "twitter:description", content: description },
-        { name: "twitter:image", content: "http://www.gjc.services/og-image.jpg" },
+        { name: "twitter:image", content: "https://gurujijobconsultancy.in/og-image.jpg" },
         { name: "robots", content: "index, follow" },
       ],
       links: [{ rel: "canonical", href: canonicalUrl }],

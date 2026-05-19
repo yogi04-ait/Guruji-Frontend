@@ -22,8 +22,8 @@ export const Route = createFileRoute("/industries")({
         content: "Deep recruitment expertise across the sectors that drive India forward.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "http://www.gjc.services/industries" },
-      { property: "og:image", content: "http://www.gjc.services/og-image.jpg" },
+      { property: "og:url", content: "https://gurujijobconsultancy.in/industries" },
+      { property: "og:image", content: "https://gurujijobconsultancy.in/og-image.jpg" },
       // Twitter / X Card
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "Industries We Serve — Guruji Job Consultancy" },
@@ -32,9 +32,9 @@ export const Route = createFileRoute("/industries")({
         content:
           "Specialist recruitment across Manufacturing, Healthcare, IT, Retail, Logistics in India.",
       },
-      { name: "twitter:image", content: "http://www.gjc.services/og-image.jpg" },
+      { name: "twitter:image", content: "https://gurujijobconsultancy.in/og-image.jpg" },
     ],
-    links: [{ rel: "canonical", href: "http://www.gjc.services/industries" }],
+    links: [{ rel: "canonical", href: "https://gurujijobconsultancy.in/industries" }],
   }),
   component: IndustriesPage,
 });

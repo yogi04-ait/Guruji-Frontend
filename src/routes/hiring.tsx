@@ -21,8 +21,8 @@ export const Route = createFileRoute("/hiring")({
         content: "Live job openings curated by Guruji Job Consultancy. Apply now.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "http://www.gjc.services/hiring" },
-      { property: "og:image", content: "http://www.gjc.services/og-image.jpg" },
+      { property: "og:url", content: "https://gurujijobconsultancy.in/hiring" },
+      { property: "og:image", content: "https://gurujijobconsultancy.in/og-image.jpg" },
       // Twitter / X Card
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "Currently Hiring — Guruji Job Consultancy" },
@@ -30,9 +30,9 @@ export const Route = createFileRoute("/hiring")({
         name: "twitter:description",
         content: "Live job openings across Delhi NCR. Apply directly.",
       },
-      { name: "twitter:image", content: "http://www.gjc.services/og-image.jpg" },
+      { name: "twitter:image", content: "https://gurujijobconsultancy.in/og-image.jpg" },
     ],
-    links: [{ rel: "canonical", href: "http://www.gjc.services/hiring" }],
+    links: [{ rel: "canonical", href: "https://gurujijobconsultancy.in/hiring" }],
   }),
   component: HiringPage,
 });

@@ -46,9 +46,6 @@ export const SiteHeader = memo(function SiteHeader({
             <span className="font-display text-base font-bold text-foreground">
               Guruji Job Consultancy
             </span>
-            <span className="text-[11px] font-medium tracking-wide text-accent">
-              Get Job Companion
-            </span>
           </div>
         </Link>
 

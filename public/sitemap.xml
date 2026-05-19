@@ -6,7 +6,7 @@
 
   <!-- Homepage — highest priority -->
   <url>
-    <loc>http://www.gjc.services/</loc>
+    <loc>https://gurujijobconsultancy.in/</loc>
     <lastmod>2026-05-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
@@ -14,7 +14,7 @@
 
   <!-- About page -->
   <url>
-    <loc>http://www.gjc.services/about</loc>
+    <loc>https://gurujijobconsultancy.in/about</loc>
     <lastmod>2026-05-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -22,7 +22,7 @@
 
   <!-- Services page -->
   <url>
-    <loc>http://www.gjc.services/services</loc>
+    <loc>https://gurujijobconsultancy.in/services</loc>
     <lastmod>2026-05-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
@@ -30,7 +30,7 @@
 
   <!-- Industries page -->
   <url>
-    <loc>http://www.gjc.services/industries</loc>
+    <loc>https://gurujijobconsultancy.in/industries</loc>
     <lastmod>2026-05-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -38,7 +38,7 @@
 
   <!-- Hiring / Live Openings page -->
   <url>
-    <loc>http://www.gjc.services/hiring</loc>
+    <loc>https://gurujijobconsultancy.in/hiring</loc>
     <lastmod>2026-05-12</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
@@ -46,7 +46,7 @@
 
   <!-- Contact page -->
   <url>
-    <loc>http://www.gjc.services/contact</loc>
+    <loc>https://gurujijobconsultancy.in/contact</loc>
     <lastmod>2026-05-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>

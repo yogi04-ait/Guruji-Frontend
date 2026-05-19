@@ -42,8 +42,8 @@ export const Route = createFileRoute("/")({
           "Trusted placement services in Delhi NCR. Find a job or hire skilled candidates with personalized guidance.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "http://www.gjc.services/" },
-      { property: "og:image", content: "http://www.gjc.services/og-image.jpg" },
+      { property: "og:url", content: "https://gurujijobconsultancy.in/" },
+      { property: "og:image", content: "https://gurujijobconsultancy.in/og-image.jpg" },
       // Twitter / X Card
       { name: "twitter:card", content: "summary_large_image" },
       {
@@ -54,14 +54,14 @@ export const Route = createFileRoute("/")({
         name: "twitter:description",
         content: "Trusted placement services in Delhi NCR. Find a job or hire skilled candidates.",
       },
-      { name: "twitter:image", content: "http://www.gjc.services/og-image.jpg" },
+      { name: "twitter:image", content: "https://gurujijobconsultancy.in/og-image.jpg" },
     ],
-    links: [{ rel: "canonical", href: "http://www.gjc.services/" }],
+    links: [{ rel: "canonical", href: "https://gurujijobconsultancy.in/" }],
     scripts: [
       {
         type: "application/ld+json",
         children:
-          '{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"http://www.gjc.services/#organization","name":"Guruji Job Consultancy","alternateName":"GJC","url":"http://www.gjc.services/","logo":{"@type":"ImageObject","url":"http://www.gjc.services/og-image.jpg"},"contactPoint":{"@type":"ContactPoint","telephone":"+91-92170-10815","contactType":"customer service","areaServed":"IN","availableLanguage":["English","Hindi"]}},{"@type":"LocalBusiness","@id":"http://www.gjc.services/#localbusiness","name":"Guruji Job Consultancy","description":"Trusted job placement and recruitment consultancy in Gurgaon, Delhi NCR.","url":"http://www.gjc.services/","telephone":"+91-92170-10815","email":"guruji.jobconsultancy@gmail.com","address":{"@type":"PostalAddress","addressLocality":"Gurugram","addressRegion":"Haryana","addressCountry":"IN"},"geo":{"@type":"GeoCoordinates","latitude":28.4595,"longitude":77.0266},"openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],"opens":"10:00","closes":"18:00"}],"priceRange":"Free for job seekers","areaServed":["Delhi NCR","Gurugram","India"]},{"@type":"WebSite","@id":"http://www.gjc.services/#website","url":"http://www.gjc.services/","name":"Guruji Job Consultancy","publisher":{"@id":"http://www.gjc.services/#organization"}}]}',
+          '{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://gurujijobconsultancy.in/#organization","name":"Guruji Job Consultancy","alternateName":"GJC","url":"https://gurujijobconsultancy.in/","logo":{"@type":"ImageObject","url":"https://gurujijobconsultancy.in/og-image.jpg"},"contactPoint":{"@type":"ContactPoint","telephone":"+91-92170-10815","contactType":"customer service","areaServed":"IN","availableLanguage":["English","Hindi"]}},{"@type":"LocalBusiness","@id":"https://gurujijobconsultancy.in/#localbusiness","name":"Guruji Job Consultancy","description":"Trusted job placement and recruitment consultancy in Gurgaon, Delhi NCR.","url":"https://gurujijobconsultancy.in/","telephone":"+91-92170-10815","email":"contactus@gurujijobconsultancy.in","address":{"@type":"PostalAddress","addressLocality":"Gurugram","addressRegion":"Haryana","addressCountry":"IN"},"geo":{"@type":"GeoCoordinates","latitude":28.4595,"longitude":77.0266},"openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],"opens":"10:00","closes":"18:00"}],"priceRange":"Free for job seekers","areaServed":["Delhi NCR","Gurugram","India"]},{"@type":"WebSite","@id":"https://gurujijobconsultancy.in/#website","url":"https://gurujijobconsultancy.in/","name":"Guruji Job Consultancy","publisher":{"@id":"https://gurujijobconsultancy.in/#organization"}}]}',
       },
     ],
   }),

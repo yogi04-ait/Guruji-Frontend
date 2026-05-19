@@ -18,4 +18,4 @@ Disallow: /admin/hiring-partners
 Crawl-delay: 10
 
 # Sitemap location
-Sitemap: http://www.gjc.services/sitemap.xml
+Sitemap: https://gurujijobconsultancy.in/sitemap.xml

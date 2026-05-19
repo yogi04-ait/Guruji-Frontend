@@ -23,8 +23,8 @@ export const Route = createFileRoute("/about")({
           "The right job can change lives. Learn about our mission, values and approach to placement.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "http://www.gjc.services/about" },
-      { property: "og:image", content: "http://www.gjc.services/og-image.jpg" },
+      { property: "og:url", content: "https://gurujijobconsultancy.in/about" },
+      { property: "og:image", content: "https://gurujijobconsultancy.in/og-image.jpg" },
       // Twitter / X Card
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "About Us — Guruji Job Consultancy" },
@@ -32,9 +32,9 @@ export const Route = createFileRoute("/about")({
         name: "twitter:description",
         content: "Trusted placement services in Gurgaon and Delhi NCR. Learn about our mission.",
       },
-      { name: "twitter:image", content: "http://www.gjc.services/og-image.jpg" },
+      { name: "twitter:image", content: "https://gurujijobconsultancy.in/og-image.jpg" },
     ],
-    links: [{ rel: "canonical", href: "http://www.gjc.services/about" }],
+    links: [{ rel: "canonical", href: "https://gurujijobconsultancy.in/about" }],
   }),
   component: AboutPage,
 });

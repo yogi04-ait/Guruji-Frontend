@@ -69,16 +69,8 @@ export function SiteFooter() {
               <div className="flex items-start gap-1">
                 <Phone className="mt-0.5 h-4 w-4 text-accent" />
 
-                <a href="tel:+917428700215" className="transition-colors hover:text-accent">
-                  +91 7428700215
-                </a>
-              </div>
-
-              <div className="flex items-start gap-1">
-                <Phone className="mt-0.5 h-4 w-4 text-accent" />
-
-                <a href="tel:+919599303139" className="transition-colors hover:text-accent">
-                  +91 9599303139
+                <a href="tel:+917428700214" className="transition-colors hover:text-accent">
+                  +91 7428700214
                 </a>
               </div>
             </li>
@@ -86,10 +78,10 @@ export function SiteFooter() {
               <Mail className="mt-0.5 h-4 w-4 text-accent" />
 
               <a
-                href="mailto:guruji.jobconsultancy@gmail.com"
+                href="mailto:contactus@gurujijobconsultancy.in"
                 className="transition-colors hover:text-accent"
               >
-                guruji.jobconsultancy@gmail.com
+                Contactus@gurujijobconsultancy.in
               </a>
             </li>
             <li className="flex items-start gap-2">
